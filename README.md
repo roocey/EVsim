@@ -1,2 +1,2 @@
 # simbox
-simple python project
+super simple python project to mess with simulations
