@@ -10,7 +10,7 @@ import datetime
 
 begin_time = datetime.datetime.now()
 
-maximum_simulations = 100000
+maximum_simulations = 10000
 
 
 class cycler:
@@ -20,21 +20,26 @@ class cycler:
         self.cycles = 0
 
 
-class simulator():
-    def __init__(self):
+class simulator:
+    def __init__(self, unique=True):
         self.real_combinations = []
         self.simulations = 0
         self.running_total = 0
+        self.uniqueness = unique
 
 
 cycler_ = cycler()
 simulator_ = simulator()
-maximum_combinations = len(cycler_.colors) * int(len(cycler_.colors)-1)
+if (simulator_.uniqueness):
+    maximum_combinations = len(cycler_.colors) * int(len(cycler_.colors)-1)
+else:
+    maximum_combinations = len(cycler_.colors) * len(cycler_.colors)
 
 
 def cycle():
     primary_color = random.choice(cycler_.colors)
-    cycler_.colors.remove(primary_color)
+    if (simulator_.uniqueness):
+        cycler_.colors.remove(primary_color)
     secondary_color = random.choice(cycler_.colors)
     color_choice = primary_color + secondary_color
     cycler_.cycles += 1
@@ -63,7 +68,7 @@ else:
     end_time = (datetime.datetime.now() - begin_time)
     print("Simulations concluded! (n=" + str(commify(simulator_.simulations)) +
           ")")
-    print("The average number of cycles taken to find every unique" +
+    print("The average number of cycles taken to find every unique " +
           "combination was " +
           str(simulator_.running_total / simulator_.simulations))
     print("The simulations took " + str(end_time))
