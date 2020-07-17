@@ -10,34 +10,61 @@ import datetime
 
 begin_time = datetime.datetime.now()
 
-colors = ["Red", "Yellow", "Green", "Purple", "Blue", "Black", "Pink"]
+maximum_simulations = 100000
 
-real_combinations = []
-cycles = 0
-simulations = 0
-maximum_simulations = 10000
-running_average = 0
 
-maximum_combinations = len(colors) * int(len(colors)-1)
-print(maximum_combinations)
+class cycler:
+    def __init__(self):
+        self.colors = ["Red", "Yellow", "Green", "Purple", "Blue"]
+        self.original_colors = list(self.colors)
+        self.cycles = 0
 
-while simulations < maximum_simulations:
-    while len(real_combinations) < maximum_combinations:
-        temp_colors = colors[:]
-        primary = random.choice(temp_colors)
-        temp_colors.remove(primary)
-        secondary = random.choice(temp_colors)
-        color_choice = primary + secondary
-        cycles += 1
-        if (color_choice not in real_combinations):
-            real_combinations.append(color_choice)
+
+class simulator():
+    def __init__(self):
+        self.real_combinations = []
+        self.simulations = 0
+        self.running_total = 0
+
+
+cycler_ = cycler()
+simulator_ = simulator()
+maximum_combinations = len(cycler_.colors) * int(len(cycler_.colors)-1)
+
+
+def cycle():
+    primary_color = random.choice(cycler_.colors)
+    cycler_.colors.remove(primary_color)
+    secondary_color = random.choice(cycler_.colors)
+    color_choice = primary_color + secondary_color
+    cycler_.cycles += 1
+    cycler_.colors = cycler_.original_colors[:]
+    if (color_choice not in simulator_.real_combinations):
+        simulator_.real_combinations.append(color_choice)
+
+
+def simulate():
+    simulator_.real_combinations = []
+    simulator_.simulations += 1
+    simulator_.running_total += cycler_.cycles
+    cycler_.cycles = 0
+
+
+def commify(num=1000):
+    return f"{num:,}"
+
+
+while simulator_.simulations < maximum_simulations:
+    while len(simulator_.real_combinations) < maximum_combinations:
+        cycle()
     else:
-        real_combinations = []
-        simulations += 1
-        running_average += cycles
-        cycles = 0
+        simulate()
 else:
-    print("Simulations concluded! (" + str(simulations) + ")")
-    print("The average number of cycles taken was " +
-          str(running_average / simulations))
-    print("The simulations took " + str(datetime.datetime.now() - begin_time))
+    end_time = (datetime.datetime.now() - begin_time)
+    print("Simulations concluded! (n=" + str(commify(simulator_.simulations)) +
+          ")")
+    print("The average number of cycles taken to find every unique" +
+          "combination was " +
+          str(simulator_.running_total / simulator_.simulations))
+    print("The simulations took " + str(end_time))
+    print("Average sim time: " + str(end_time / simulator_.simulations))
