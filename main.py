@@ -12,7 +12,7 @@ begin_time = datetime.datetime.now()
 
 
 class cycler:
-    def __init__(self, uniqueness=False, num=4, dims=3):
+    def __init__(self, uniqueness=True, num=5, dims=2):
         self.colors = []
         self.original_colors = []
         self.real_combinations = []
@@ -37,8 +37,6 @@ class cycler:
                 else:
                     self.maximum_combinations *= len(self.colors)
                 dims -= 1
-            else:
-                print(self.maximum_combinations)
 
 
 class simulator:
@@ -49,9 +47,9 @@ class simulator:
         self.maximum_simulations = max_sims
 
 
-cycler_ = cycler()
+cycler_ = cycler(True, 5, 1)
 cycler_.setup()
-simulator_ = simulator(100)
+simulator_ = simulator(1000000)
 
 
 def cycle():
