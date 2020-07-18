@@ -16,14 +16,14 @@ maximum_simulations = 100000
 
 class cycler:
     def __init__(self):
-        self.colors = ["Red", "Yellow", "Green", "Purple", "Blue"]
+        self.colors = ["Yellow", "Blue", "Red", "Purple", "Green"]
         self.original_colors = list(self.colors)
         self.cycles = 0
 
 
 class simulator:
     def __init__(self, unique=True):
-        self.real_combinations = []
+        self.real_combinations = np.array([])
         self.simulations = 0
         self.uniqueness = unique
         self.cycles_table = []
@@ -46,11 +46,11 @@ def cycle():
     cycler_.cycles += 1
     cycler_.colors = cycler_.original_colors[:]
     if (color_choice not in simulator_.real_combinations):
-        simulator_.real_combinations.append(color_choice)
+        simulator_.real_combinations = np.append(simulator_.real_combinations, color_choice)
 
 
 def simulate():
-    simulator_.real_combinations = []
+    simulator_.real_combinations = np.array([])
     simulator_.simulations += 1
     simulator_.cycles_table.append(cycler_.cycles)
     cycler_.cycles = 0
