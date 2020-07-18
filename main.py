@@ -7,7 +7,6 @@ Created on Thu Jul 16 17:13:48 2020
 """
 import random
 import datetime
-import numpy as np
 
 begin_time = datetime.datetime.now()
 
