@@ -6,6 +6,6 @@ Simple example of how simbox works: imagine you have a bag with five balls, each
 TODO:
 
 1. Make it faster (set variables once, move away from lists and repetitive ifs)
-2. Detach "colors" and make a simple UI to set combination parameters 
-3. Allow for different combination paramters other than (len * (len-1))
+2. Detach "colors" and make a simple UI to set combination parameters [detached colors]
+3. Allow for different combination paramters other than (len * (len-1)) [mostly done]
 4. Introduce meta level higher-order class to simulate simulations, test speed differences between different complexities, and so on.
