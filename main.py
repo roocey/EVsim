@@ -7,10 +7,11 @@ Created on Thu Jul 16 17:13:48 2020
 """
 import random
 import datetime
+import numpy as np
 
 begin_time = datetime.datetime.now()
 
-maximum_simulations = 10000
+maximum_simulations = 100000
 
 
 class cycler:
@@ -24,8 +25,8 @@ class simulator:
     def __init__(self, unique=True):
         self.real_combinations = []
         self.simulations = 0
-        self.running_total = 0
         self.uniqueness = unique
+        self.cycles_table = []
 
 
 cycler_ = cycler()
@@ -51,11 +52,11 @@ def cycle():
 def simulate():
     simulator_.real_combinations = []
     simulator_.simulations += 1
-    simulator_.running_total += cycler_.cycles
+    simulator_.cycles_table.append(cycler_.cycles)
     cycler_.cycles = 0
 
 
-def commify(num=1000):
+def commify(num):
     return f"{num:,}"
 
 
@@ -70,6 +71,10 @@ else:
           ")")
     print("The average number of cycles taken to find every unique " +
           "combination was " +
-          str(simulator_.running_total / simulator_.simulations))
+          str(sum(simulator_.cycles_table) / simulator_.simulations))
     print("The simulations took " + str(end_time))
     print("Average sim time: " + str(end_time / simulator_.simulations))
+    print("Minimum number of combinations taken was " +
+          str(min(simulator_.cycles_table)))
+    print("Maximum number of combinations taken was " +
+          str(max(simulator_.cycles_table)))
