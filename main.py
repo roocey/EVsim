@@ -8,21 +8,24 @@ Created on Thu Jul 16 17:13:48 2020
 import random
 import datetime
 
-begin_time = datetime.datetime.now()
-
 
 class cycler:
-    def __init__(self, uniqueness=True, num=5, dims=2):
+    def __init__(self):
         self.colors = []
         self.original_colors = []
         self.real_combinations = []
         self.maximum_combinations = 0
         self.cycles = 0
-        self.num = num
-        self.unique = uniqueness
-        self.dimensions = dims
+        self.num = int(input("Number of items to test: "))
+        self.dimensions = int(input("Every combination of: "))
+        self.unique = str(input("Combinations must not contain repeat " +
+                                "items. "))
 
     def setup(self):
+        if self.unique == "1" or self.unique == "True":
+            self.unique = True
+        else:
+            self.unique = False
         while self.num > 0:
             self.colors.append(str(self.num))
             self.num -= 1
@@ -47,9 +50,10 @@ class simulator:
         self.maximum_simulations = max_sims
 
 
-cycler_ = cycler(True, 5, 1)
+cycler_ = cycler()
 cycler_.setup()
-simulator_ = simulator(1000000)
+simulator_ = simulator(1000)
+begin_time = datetime.datetime.now()
 
 
 def cycle():
@@ -87,6 +91,7 @@ while simulator_.simulations < simulator_.maximum_simulations:
         simulate()
 else:
     end_time = (datetime.datetime.now() - begin_time)
+    print("-----")
     print("Simulations concluded! (n=" + str(commify(simulator_.simulations)) +
           ")")
     print("The average number of cycles taken to find every unique " +
@@ -94,7 +99,9 @@ else:
           str(sum(simulator_.cycles_table) / simulator_.simulations))
     print("The simulations took " + str(end_time))
     print("Average sim time: " + str(end_time / simulator_.simulations))
-    print("Minimum number of combinations taken was " +
-          str(min(simulator_.cycles_table)))
-    print("Maximum number of combinations taken was " +
-          str(max(simulator_.cycles_table)))
+    print("Minimum number of attempts taken to find all possible " +
+          "combinations was " + str(min(simulator_.cycles_table)))
+    print("Maximum number of combinations taken to find all possible " +
+          "combinations was " + str(max(simulator_.cycles_table)))
+    print("The maximum number of combinations was: " +
+          str(cycler_.maximum_combinations))
