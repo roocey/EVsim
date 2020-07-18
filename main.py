@@ -12,7 +12,7 @@ begin_time = datetime.datetime.now()
 
 
 class cycler:
-    def __init__(self, uniqueness=True, num=9):
+    def __init__(self, uniqueness=False, num=4, dims=3):
         self.colors = []
         self.original_colors = []
         self.real_combinations = []
@@ -20,6 +20,7 @@ class cycler:
         self.cycles = 0
         self.num = num
         self.unique = uniqueness
+        self.dimensions = dims
 
     def setup(self):
         while self.num > 0:
@@ -27,10 +28,17 @@ class cycler:
             self.num -= 1
         else:
             self.original_colors = list(self.colors)
-            if self.unique:
-                self.maximum_combinations = len(self.colors) * int(len(self.colors)-1)
+            self.maximum_combinations = len(self.colors)
+            dims = self.dimensions
+            dims -= 1
+            while dims > 0:
+                if self.unique:
+                    self.maximum_combinations *= int(len(self.colors)-dims)
+                else:
+                    self.maximum_combinations *= len(self.colors)
+                dims -= 1
             else:
-                self.maximum_combinations = len(self.colors) * len(self.colors)
+                print(self.maximum_combinations)
 
 
 class simulator:
@@ -43,19 +51,24 @@ class simulator:
 
 cycler_ = cycler()
 cycler_.setup()
-simulator_ = simulator(10000)
+simulator_ = simulator(100)
 
 
 def cycle():
-    primary_color = random.choice(cycler_.colors)
-    if (cycler_.unique):
-        cycler_.colors.remove(primary_color)
-    secondary_color = random.choice(cycler_.colors)
-    color_choice = primary_color + secondary_color
-    cycler_.cycles += 1
-    cycler_.colors = cycler_.original_colors[:]
-    if (color_choice not in cycler_.real_combinations):
-        cycler_.real_combinations.append(color_choice)
+    color_picker = []
+    number_to_pick = cycler_.dimensions
+    while number_to_pick > 0:
+        number_to_pick -= 1
+        new_color = random.choice(cycler_.colors)
+        color_picker.append(new_color)
+        if cycler_.unique:
+            cycler_.colors.remove(new_color)
+    else:
+        color_choice = "".join(map(str, color_picker))
+        cycler_.cycles += 1
+        cycler_.colors = cycler_.original_colors[:]
+        if (color_choice not in cycler_.real_combinations):
+            cycler_.real_combinations.append(color_choice)
 
 
 def simulate():
