@@ -10,46 +10,56 @@ import datetime
 
 begin_time = datetime.datetime.now()
 
-maximum_simulations = 100000
-
 
 class cycler:
-    def __init__(self):
-        self.colors = ["Red", "Yellow", "Green", "Purple", "Blue"]
-        self.original_colors = list(self.colors)
+    def __init__(self, uniqueness=True, num=9):
+        self.colors = []
+        self.original_colors = []
+        self.real_combinations = []
+        self.maximum_combinations = 0
         self.cycles = 0
+        self.num = num
+        self.unique = uniqueness
+
+    def setup(self):
+        while self.num > 0:
+            self.colors.append(str(self.num))
+            self.num -= 1
+        else:
+            self.original_colors = list(self.colors)
+            if self.unique:
+                self.maximum_combinations = len(self.colors) * int(len(self.colors)-1)
+            else:
+                self.maximum_combinations = len(self.colors) * len(self.colors)
 
 
 class simulator:
-    def __init__(self, unique=True):
-        self.real_combinations = []
+    def __init__(self, max_sims=100):
         self.simulations = 0
-        self.uniqueness = unique
         self.cycles_table = []
+        self.maximum_combinations = 0
+        self.maximum_simulations = max_sims
 
 
 cycler_ = cycler()
-simulator_ = simulator()
-if (simulator_.uniqueness):
-    maximum_combinations = len(cycler_.colors) * int(len(cycler_.colors)-1)
-else:
-    maximum_combinations = len(cycler_.colors) * len(cycler_.colors)
+cycler_.setup()
+simulator_ = simulator(10000)
 
 
 def cycle():
     primary_color = random.choice(cycler_.colors)
-    if (simulator_.uniqueness):
+    if (cycler_.unique):
         cycler_.colors.remove(primary_color)
     secondary_color = random.choice(cycler_.colors)
     color_choice = primary_color + secondary_color
     cycler_.cycles += 1
     cycler_.colors = cycler_.original_colors[:]
-    if (color_choice not in simulator_.real_combinations):
-        simulator_.real_combinations.append(color_choice)
+    if (color_choice not in cycler_.real_combinations):
+        cycler_.real_combinations.append(color_choice)
 
 
 def simulate():
-    simulator_.real_combinations = []
+    cycler_.real_combinations = []
     simulator_.simulations += 1
     simulator_.cycles_table.append(cycler_.cycles)
     cycler_.cycles = 0
@@ -59,8 +69,8 @@ def commify(num):
     return f"{num:,}"
 
 
-while simulator_.simulations < maximum_simulations:
-    while len(simulator_.real_combinations) < maximum_combinations:
+while simulator_.simulations < simulator_.maximum_simulations:
+    while len(cycler_.real_combinations) < cycler_.maximum_combinations:
         cycle()
     else:
         simulate()
