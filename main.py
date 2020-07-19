@@ -7,6 +7,7 @@ Created on Thu Jul 16 17:13:48 2020
 """
 import random
 import datetime
+import pandas as pd
 
 
 class cycler:
@@ -46,13 +47,18 @@ class simulator:
     def __init__(self, max_sims=100):
         self.simulations = 0
         self.cycles_table = []
-        self.maximum_combinations = 0
         self.maximum_simulations = max_sims
+
+
+class meta:
+    def __init__(self):
+        pass
 
 
 cycler_ = cycler()
 cycler_.setup()
 simulator_ = simulator(1000)
+meta_ = meta()
 begin_time = datetime.datetime.now()
 
 
@@ -78,11 +84,31 @@ def simulate():
     simulator_.simulations += 1
     simulator_.cycles_table.append(cycler_.cycles)
     cycler_.cycles = 0
+    #if (simulator_.simulations == (simulator_.maximum_simulations//20)):
+     #   check_time = (datetime.datetime.now() - begin_time)
+      #  print("It took this long to complete 5% of the simulations: " +
+       #       str(check_time))
+        #print("Estimated time remaining: " + str(check_time*19))
 
 
 def commify(num):
     return f"{num:,}"
 
+
+def generate_csv(time):
+    data = pd.DataFrame([[cycler_.maximum_combinations, time, simulator_.maximum_simulations]], columns=['Complexity', 'Time', 'Sims'])
+    data.to_csv('data.csv', mode='a', header=False)
+
+
+def estimate_time():
+    if (simulator_.maximum_simulations % 1000 == 0):
+        # y=-16.48+0.22x
+        estimate = -16.48 + (0.22 * cycler_.maximum_combinations)
+        estimate *= simulator_.maximum_simulations // 1000
+        print(estimate)
+
+
+estimate_time()
 
 while simulator_.simulations < simulator_.maximum_simulations:
     while len(cycler_.real_combinations) < cycler_.maximum_combinations:
@@ -105,3 +131,4 @@ else:
           "combinations was " + str(max(simulator_.cycles_table)))
     print("The maximum number of combinations was: " +
           str(cycler_.maximum_combinations))
+    generate_csv(end_time)
