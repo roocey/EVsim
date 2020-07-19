@@ -23,13 +23,14 @@ class cycler:
                                 "items. "))
 
     def setup(self):
+        setup_num = self.num
         if self.unique == "1" or self.unique == "True":
             self.unique = True
         else:
             self.unique = False
-        while self.num > 0:
-            self.colors.append(str(self.num))
-            self.num -= 1
+        while setup_num > 0:
+            self.colors.append(str(setup_num))
+            setup_num -= 1
         else:
             self.original_colors = list(self.colors)
             self.maximum_combinations = len(self.colors)
@@ -91,13 +92,22 @@ def simulate():
         #print("Estimated time remaining: " + str(check_time*19))
 
 
-def commify(num):
-    return f"{num:,}"
-
-
 def generate_csv(time):
-    data = pd.DataFrame([[cycler_.maximum_combinations, time, simulator_.maximum_simulations]], columns=['Complexity', 'Time', 'Sims'])
-    data.to_csv('data.csv', mode='a', header=False)
+    dataset = [cycler_.num, cycler_.dimensions, int(cycler_.unique),
+               cycler_.maximum_combinations, time,
+               simulator_.maximum_simulations,
+               end_time / simulator_.maximum_simulations]
+    data = pd.DataFrame([dataset], columns=['Items', 'Dimensions',
+                                            'Unique', 'Complexity',
+                                            'Total Time Taken (s)',
+                                            'Simulations',
+                                            'Average Time Taken per Sim (s)'])
+    try:
+        pd.read_csv('data.csv')
+        data.to_csv('data.csv', mode='a', header=False)
+    except OSError:
+        print(f'Note data.csv was not found. Creating new file.')
+        data.to_csv('data.csv', mode='w', header=True)
 
 
 def estimate_time():
@@ -108,27 +118,23 @@ def estimate_time():
         print(estimate)
 
 
-estimate_time()
-
 while simulator_.simulations < simulator_.maximum_simulations:
     while len(cycler_.real_combinations) < cycler_.maximum_combinations:
         cycle()
     else:
         simulate()
 else:
-    end_time = (datetime.datetime.now() - begin_time)
-    print("-----")
-    print("Simulations concluded! (n=" + str(commify(simulator_.simulations)) +
-          ")")
-    print("The average number of cycles taken to find every unique " +
-          "combination was " +
-          str(sum(simulator_.cycles_table) / simulator_.simulations))
-    print("The simulations took " + str(end_time))
-    print("Average sim time: " + str(end_time / simulator_.simulations))
-    print("Minimum number of attempts taken to find all possible " +
-          "combinations was " + str(min(simulator_.cycles_table)))
-    print("Maximum number of combinations taken to find all possible " +
-          "combinations was " + str(max(simulator_.cycles_table)))
-    print("The maximum number of combinations was: " +
-          str(cycler_.maximum_combinations))
+    end_time = (datetime.datetime.now() - begin_time).total_seconds()
+    print(f'-----')
+    print(f'Simulations concluded! (n={simulator_.simulations:,})')
+    print(f'The average number of cycles taken to find every combination was'
+          f' {sum(simulator_.cycles_table)/(simulator_.simulations)}')
+    print(f'The simulations took {end_time} seconds')
+    print(f'Average sim time: {end_time / simulator_.simulations} seconds')
+    print(f'Minimum number of attempts taken to find all possible'
+          f' combinations was {min(simulator_.cycles_table)}')
+    print(f'Maximum number of combinations taken to find all possible'
+          f' combinations was {max(simulator_.cycles_table)}')
+    print(f'Complexity score (absolute minimum number of attempts'
+          f' required) was {cycler_.maximum_combinations}')
     generate_csv(end_time)
