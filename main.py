@@ -58,7 +58,7 @@ class meta:
 
 cycler_ = cycler()
 cycler_.setup()
-simulator_ = simulator(1000)
+simulator_ = simulator(10000)
 meta_ = meta()
 begin_time = datetime.datetime.now()
 
@@ -88,17 +88,23 @@ def generate_csv(time):
     dataset = [cycler_.num, cycler_.dimensions, int(cycler_.unique),
                cycler_.maximum_combinations, time,
                simulator_.maximum_simulations,
-               end_time / simulator_.maximum_simulations]
+               end_time / simulator_.maximum_simulations,
+               sum(simulator_.cycles_table)/simulator_.simulations,
+               min(simulator_.cycles_table), max(simulator_.cycles_table),
+               cycler_.maximum_combinations / min(simulator_.cycles_table)]
     data = pd.DataFrame([dataset], columns=['Items', 'Dimensions',
                                             'Unique', 'Complexity',
                                             'Total Time Taken (s)',
                                             'Simulations',
-                                            'Average Time Taken per Sim (s)'])
+                                            'Average Time Taken per Sim (s)',
+                                            'Mean attempts (EV)',
+                                            'Min attempts', 'Max Attempts',
+                                            'Percent Discovered'])
     try:
         pd.read_csv('data.csv')
         data.to_csv('data.csv', mode='a', header=False)
     except OSError:
-        print(f'Note data.csv was not found. Creating new file.')
+        print(f'data.csv was not found. Creating new file.')
         data.to_csv('data.csv', mode='w', header=True)
 
 
