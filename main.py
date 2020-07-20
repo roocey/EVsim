@@ -65,19 +65,31 @@ begin_time = datetime.datetime.now()
 
 def cycle():
     color_picker = []
+<<<<<<< Updated upstream
     number_to_pick = cycler_.dimensions
     while number_to_pick > 0:
         number_to_pick -= 1
+=======
+    for i in range(cycler_.dimensions):
+>>>>>>> Stashed changes
         new_color = random.choice(cycler_.colors)
         color_picker.append(new_color)
         if cycler_.unique:
             cycler_.colors.remove(new_color)
+<<<<<<< Updated upstream
     else:
         color_choice = "".join(map(str, color_picker))
         cycler_.cycles += 1
         cycler_.colors = cycler_.original_colors[:]
         if (color_choice not in cycler_.real_combinations):
             cycler_.real_combinations.append(color_choice)
+=======
+    color_choice = "".join(map(str, color_picker))
+    cycler_.cycles += 1
+    cycler_.colors = cycler_.original_colors[:]
+    if (color_choice not in cycler_.real_combinations):
+        cycler_.real_combinations.append(color_choice)
+>>>>>>> Stashed changes
 
 
 def simulate():
@@ -85,11 +97,6 @@ def simulate():
     simulator_.simulations += 1
     simulator_.cycles_table.append(cycler_.cycles)
     cycler_.cycles = 0
-    #if (simulator_.simulations == (simulator_.maximum_simulations//20)):
-     #   check_time = (datetime.datetime.now() - begin_time)
-      #  print("It took this long to complete 5% of the simulations: " +
-       #       str(check_time))
-        #print("Estimated time remaining: " + str(check_time*19))
 
 
 def generate_csv(time):
