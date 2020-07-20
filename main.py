@@ -8,6 +8,7 @@ Created on Thu Jul 16 17:13:48 2020
 import random
 import datetime
 import pandas as pd
+import numpy as np
 
 
 class cycler:
@@ -64,20 +65,34 @@ begin_time = datetime.datetime.now()
 
 
 def cycle():
-    color_picker = []
-    number_to_pick = cycler_.dimensions
-    while number_to_pick > 0:
-        number_to_pick -= 1
-        new_color = random.choice(cycler_.colors)
-        color_picker.append(new_color)
-        if cycler_.unique:
-            cycler_.colors.remove(new_color)
-    else:
-        color_choice = "".join(map(str, color_picker))
-        cycler_.cycles += 1
-        cycler_.colors = cycler_.original_colors[:]
-        if (color_choice not in cycler_.real_combinations):
-            cycler_.real_combinations.append(color_choice)
+    
+
+# def cycle():
+#     color_picker = []
+#     for i in range(cycler_.dimensions):
+#         new_color = random.choice(cycler_.colors)
+#         color_picker.append(new_color)
+#         if cycler_.unique:
+#             cycler_.colors.remove(new_color)
+#     color_choice = "".join(map(str, color_picker))
+#     cycler_.cycles += 1
+#     cycler_.colors = cycler_.original_colors[:]
+#     if (color_choice not in cycler_.real_combinations):
+#         cycler_.real_combinations.append(color_choice)
+
+    #number_to_pick = cycler_.dimensions
+    # while number_to_pick > 0:
+    #     number_to_pick -= 1
+    #     new_color = random.choice(cycler_.colors)
+    #     color_picker.append(new_color)
+    #     if cycler_.unique:
+    #         cycler_.colors.remove(new_color)
+    #else
+        # color_choice = "".join(map(str, color_picker))
+        # cycler_.cycles += 1
+        # cycler_.colors = cycler_.original_colors[:]
+        # if (color_choice not in cycler_.real_combinations):
+        #     cycler_.real_combinations.append(color_choice)
 
 
 def simulate():
